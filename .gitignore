@@ -1,0 +1,14 @@
+# misc folder
+__pycache__/
+.vscode/
+
+#data folder
+data/
+
+#jsonkey
+*.json
+
+#data gzip
+*.gzip
+
+
