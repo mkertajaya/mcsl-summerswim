@@ -4,6 +4,7 @@ body {
   font-size: 14px;
   line-height: 21px;
   font-weight: 400;
+  background-image: url("../images/bgek.jpg");
 }
 h1 {
   margin: 0px 0px;
@@ -15,27 +16,6 @@ h1 {
   letter-spacing: 1px;
   text-shadow: rgba(33, 33, 33, 0.24) 0px 1px 0px;
 }
-
-
-h3 {
-  margin: 0px 0px;
-  color: #FFFF00;
-  font-size: 50px;
-  line-height: 44px;
-  font-weight: 900;
-  text-align: left;
-  letter-spacing: 1px;
-  text-shadow: rgba(33, 33, 33, 0.24) 0px 1px 0px;
-}
-
-h4 {
-  margin: 10px 0px;
-  color: Blue;
-  font-size: 18px;
-  line-height: 24px;
-  font-weight: 300;
-}
-
 h2 {
   margin: 10px 0px 35px;
   padding-top: 14px;
@@ -49,6 +29,25 @@ h2 {
   text-align: center;
   letter-spacing: 1px;
   text-shadow: rgba(0, 0, 0, 0.24) 0px 1px 0px;
+}
+h3 {
+  margin: 0px 0px;
+  color: #FFFF00;
+  font-size: 50px;
+  line-height: 44px;
+  font-weight: 900;
+  text-align: left;
+  letter-spacing: 1px;
+  text-shadow: rgba(33, 33, 33, 0.24) 0px 1px 0px;
+}
+h4 {
+  margin: 10px 0px;
+  color: #e8e81b;
+  font-size: 18px;
+  line-height: 24px;
+  font-weight: 300;
+  text-align: left;
+  letter-spacing: 1px;
 }
 .button {
   display: inline-block;
@@ -104,7 +103,6 @@ h2 {
 .section.header {
   padding-top: 0px;
   padding-bottom: 218px;
-  background-image: url(bgek.jpg);
   background-position: 50% 236%;
   background-size: cover;
   background-repeat: no-repeat no-repeat;
@@ -128,7 +126,6 @@ h2 {
 .section.bg-image {
   padding-top: 50px;
   padding-bottom: 450px;
-  background-image: url(bgek.jpg);
   background-position: 50% 50%;
   background-size: cover;
   background-attachment: fixed;
@@ -149,7 +146,6 @@ h2 {
 .align-right {
   text-align: right;
 }
-
 textarea {
    font-family: inherit;
    font-size: inherit;

@@ -11,4 +11,7 @@ data/
 #data gzip
 *.gzip
 
+#misc
+.DS_Store
+
 
