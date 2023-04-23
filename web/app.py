@@ -27,13 +27,13 @@ def lookup_data(data):
     )
 
     # Retrieve the data from the database
-    query = f"SELECT swimmer, week, substring(event, POSITION('-' IN event)+2, 100) as 'event',cast(final_seconds as float) as time FROM YEAR2022 where swimmer_name like '{data}%'"
+    query = f"SELECT swimmer, week, substring(event, POSITION('-' IN event)+2, 100) as 'event',cast(final_seconds as float) as 'final(seconds)', final FROM YEAR2022 where swimmer_name like '{data}%'"
     cursor = db.cursor()
     cursor.execute(query)
     results = cursor.fetchall()
 
     # Convert the data to a Pandas dataframe
-    df = pd.DataFrame(results, columns=["swimmer", "week", "event", "time"])
+    df = pd.DataFrame(results, columns=["swimmer", "week", "event", "final(seconds)", "final"])
 
     # Close the database connection
     cursor.close()
@@ -48,7 +48,7 @@ def lookup_data(data):
 def home():
     if request.method == "POST":
         # Retrieve the form data
-        data = request.form["data"]
+        data = request.form["swimmer"]
 
         # Lookup the data in the database
         data_values = lookup_data(data)
@@ -57,7 +57,7 @@ def home():
         title = data_values["swimmer"][0]
 
         # Create the chart
-        fig = px.line(data_values, x="week", y="time", color="event", markers=True, title=title)
+        fig = px.line(data_values, x="week", y="final(seconds)", color="event", text="final",markers=True, title=title)
 
         # Return the chart as an HTML string
         return fig.to_html(full_html=False)
