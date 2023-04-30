@@ -1,6 +1,5 @@
 from flask import Flask, render_template, request
 import pandas as pd
-import plotly.graph_objs as go
 import plotly.express as px
 import mysql.connector
 import json
