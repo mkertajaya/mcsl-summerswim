@@ -78,6 +78,9 @@ def home():
         # and creat dataframe
         data_values = lookup_data(swimmer, stroke)
 
+        #default html page to display
+        html = 'display.html'
+
         #check if dataframe is empty or not
         if not data_values.empty:
              #create title fron the lookup functtion
@@ -101,9 +104,6 @@ def home():
 
             if is_mobile:
                 html = 'display_mobile.html'
-            else:
-                html = 'display.html'
-
 
         else: #this is when dataframe is empty which means no swimmer found
              chart_html = "<h1>Sorry, I can't find your swimmer.</h1>"
