@@ -29,7 +29,7 @@ def lookup_data(data):
     query_columns = f"SELECT  swimmer, year_week as 'week', event_name as 'event',cast(final_seconds as float) as 'final(seconds)', final"
     query_table = f"FROM v2_YEAR2012_AFT"
     query_filter = f"where final_seconds not in ('NS', 'DQ', 'DNF') and swimmer_name like '{data}%'"
-    query_orderby = f"order by swimmer_age desc"
+    query_orderby = f"order by swimmer_age"
     query = f"{query_columns} {query_table} {query_filter} {query_orderby}"
     cursor = db.cursor()
     cursor.execute(query)
@@ -57,7 +57,8 @@ def home():
         data_values = lookup_data(data)
 
         #create title fron the lookup functtion
-        title = data_values["swimmer"][0]
+        #get the last row as the df is ordered by swimmer age
+        title = data_values["swimmer"].iloc[-1]
 
         # Create the chart
         fig = px.line(data_values, x="week", y="final(seconds)", color="event", text="final",markers=True, title=title)
