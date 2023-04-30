@@ -11,9 +11,19 @@
     <form method="POST">
         <h3>Swimmer Name:</h3>
         <br>
-        <input type = "text" Name="swimmer"  id="swimmer" size = "40" style = "height:20px;" />
+        <input type = "text" name="swimmer" id="swimmer" size = "40" style = "height:20px;" />
         <h4>(Last Name, First Name)</h4>
         <br>
+        <h3>Stroke:</h3><br>
+        <label><h1><input type="radio" name="stroke" value="free" checked="checked">freestyle</h1></label>
+        <label><h1><input type="radio" name="stroke" value="back">backstroke</h1></label>
+        <label><h1><input type="radio" name="stroke" value="fly">butterfly</h1></label>
+        <label><h1><input type="radio" name="stroke" value="breast">breaststroke</h1></label>
+        <label><h1><input type="radio" name="stroke" value="individual">individual medley</h1></label>
+        <label><h1><input type="radio" name="stroke" value="all">all</h1></label>
+        <br>
+        <br>
+
         <button class="button">Show Progress</button>
     </form>
 </div>

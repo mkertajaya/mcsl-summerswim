@@ -10,14 +10,14 @@ app = Flask(__name__)
 #read json config file
 with open("config.json") as json_data_file:
     data = json.load(json_data_file)
-    # Define your MySQL database connection details
+    # define  MySQL database connection details
     db_host = data["mysql"]["db_host"]
     db_user = data["mysql"]["db_user"]
     db_password = data["mysql"]["db_password"]
     db_name = data["mysql"]["db_name"]
 
-def lookup_data(data):
-    # Connect to the MySQL database
+def lookup_data(swimmer, stroke):
+    # connect to the MySQL database
     db = mysql.connector.connect(
         host=db_host,
         user=db_user,
@@ -25,24 +25,34 @@ def lookup_data(data):
         database=db_name
     )
 
-    # Retrieve the data from the database
-    query_columns = f"SELECT  swimmer, year_week as 'week', event_name as 'event',cast(final_seconds as float) as 'final(seconds)', final"
+
+    # default query
+    query_columns = f"SELECT  swimmer, year_week as 'week', event_name as 'event', cast(final_seconds as float) as 'final(seconds)', final"
     query_table = f"FROM v2_YEAR2012_AFT"
-    query_filter = f"where final_seconds not in ('NS', 'DQ', 'DNF') and swimmer_name like '{data}%'"
+    query_filter = f"where final_seconds not in ('NS', 'DQ', 'DNF') and swimmer_name like '{swimmer}%'"
     query_orderby = f"order by swimmer_age"
+
+    #modify where filter when stroke is selected
+    if stroke != "all":
+        query_filter = f"where final_seconds not in ('NS', 'DQ', 'DNF') and swimmer_name like '{swimmer}%' and event_name like '%{stroke}%'"
+
+    #build final query
     query = f"{query_columns} {query_table} {query_filter} {query_orderby}"
+
+    #run query
     cursor = db.cursor()
     cursor.execute(query)
     results = cursor.fetchall()
 
-    # Convert the data to a Pandas dataframe
+    # convert the data to a Pandas dataframe
     df = pd.DataFrame(results, columns=["swimmer", "week", "event", "final(seconds)", "final"])
+    df = df.sort_values(by = ["week"])
 
-    # Close the database connection
+    # close the database connection
     cursor.close()
     db.close()
 
-    # Return the data as a Pandas dataframe
+    # return the data as a Pandas dataframe
     return df
 
 
@@ -51,23 +61,33 @@ def lookup_data(data):
 def home():
     #for post method
     if request.method == "POST":
-        # Retrieve the form data
-        data = request.form["swimmer"]
 
-        # Lookup the data in the database
-        #and creat dataframe
-        data_values = lookup_data(data).sort_values(by = ["week"])
+        # Retrieve the form data (swimmer and stroke)
+        swimmer = request.form.get("swimmer")
+        stroke = request.form.get("stroke")
+
+        #check if swimmer is blank
+        if not swimmer:
+            swimmer = 'empty'
+
+        #check if stroke is blank
+        if not stroke:
+            stroke = 'all'
+
+        # lookup the data in the database
+        # and creat dataframe
+        data_values = lookup_data(swimmer, stroke)
 
         #check if dataframe is empty or not
         if not data_values.empty:
              #create title fron the lookup functtion
              # #get the last row as the df is ordered by swimmer age
              title = data_values["swimmer"].iloc[-1]
-            # Create the chart
+            # create the chart
              fig = px.line(data_values, x="week", y="final(seconds)", color="event", text="final",markers=True, title=title)
              chart_html = fig.to_html(full_html=False)
         else:
-             # Handle the case where the dataframe is empty
+             #handle the case where the dataframe is empty
              chart_html = "<h1>Sorry, I can't find your swimmer.</h1>"
         return chart_html
 
