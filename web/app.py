@@ -49,23 +49,30 @@ def lookup_data(data):
 
 @app.route("/", methods=["GET", "POST"])
 def home():
+    #for post method
     if request.method == "POST":
         # Retrieve the form data
         data = request.form["swimmer"]
 
         # Lookup the data in the database
+        #and creat dataframe
         data_values = lookup_data(data)
 
-        #create title fron the lookup functtion
-        #get the last row as the df is ordered by swimmer age
-        title = data_values["swimmer"].iloc[-1]
+        #check if dataframe is empty or not
+        if not data_values.empty:
+             #create title fron the lookup functtion
+             # #get the last row as the df is ordered by swimmer age
+             title = data_values["swimmer"].iloc[-1]
+            # Create the chart
+             fig = px.line(data_values, x="week", y="final(seconds)", color="event", text="final",markers=True, title=title)
+             chart_html = fig.to_html(full_html=False)
+        else:
+             # Handle the case where the dataframe is empty
+             chart_html = "<h1>Sorry, I can't find your swimmer.</h1>"
+        return chart_html
 
-        # Create the chart
-        fig = px.line(data_values, x="week", y="final(seconds)", color="event", text="final",markers=True, title=title)
-
-        # Return the chart as an HTML string
-        return fig.to_html(full_html=False)
     else:
+        #to show index html as starting point
         return render_template("index.html")
     
 
