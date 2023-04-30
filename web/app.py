@@ -81,27 +81,34 @@ def home():
         #check if dataframe is empty or not
         if not data_values.empty:
              #create title fron the lookup functtion
-             # #get the last row as the df is ordered by swimmer age
+             #get the last row as the df is ordered by swimmer age
             title = data_values["swimmer"].iloc[-1]
-            # create the chart
+            #create the chart
             fig = px.line(data_values, x="week", y="final(seconds)", color="event", text="final",markers=True, title=title)
+            
+            # #use together with scroolZoom, disable zooming in chart
+            # fig.update_xaxes(fixedrange=True)
+            # fig.update_yaxes(fixedrange=True)
 
-            #disable zoom in ability
-            fig.update_layout(
-                xaxis=dict(
-                    rangeslider=dict(
-                        visible=False
-                    )
-                )
-            )
-            fig.update_xaxes(fixedrange=True)
-            fig.update_yaxes(fixedrange=True)
- 
-            chart_html = fig.to_html(config={'scrollZoom': False})
-        else:
-             #handle the case where the dataframe is empty
+            #to html, hiding all buttons on the top right. To disable zoom only use: 'scrollZoom':False,
+            chart_html = fig.to_html(full_html=False, config={'displayModeBar': False})
+
+            #get the user agent of the client device
+            user_agent = request.headers.get('User-Agent')
+
+            #check if the user agent is a mobile device
+            is_mobile = 'Mobile' in user_agent or 'Android' in user_agent or 'iPhone' in user_agent
+
+            if is_mobile:
+                html = 'display_mobile.html'
+            else:
+                html = 'display.html'
+
+
+        else: #this is when dataframe is empty which means no swimmer found
              chart_html = "<h1>Sorry, I can't find your swimmer.</h1>"
-        return chart_html
+
+        return render_template(html, chart_html=chart_html)
 
     else:
         #to show index html as starting point
