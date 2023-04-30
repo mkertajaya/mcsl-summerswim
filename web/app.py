@@ -82,10 +82,22 @@ def home():
         if not data_values.empty:
              #create title fron the lookup functtion
              # #get the last row as the df is ordered by swimmer age
-             title = data_values["swimmer"].iloc[-1]
+            title = data_values["swimmer"].iloc[-1]
             # create the chart
-             fig = px.line(data_values, x="week", y="final(seconds)", color="event", text="final",markers=True, title=title)
-             chart_html = fig.to_html(full_html=False)
+            fig = px.line(data_values, x="week", y="final(seconds)", color="event", text="final",markers=True, title=title)
+
+            #disable zoom in ability
+            fig.update_layout(
+                xaxis=dict(
+                    rangeslider=dict(
+                        visible=False
+                    )
+                )
+            )
+            fig.update_xaxes(fixedrange=True)
+            fig.update_yaxes(fixedrange=True)
+ 
+            chart_html = fig.to_html(config={'scrollZoom': False})
         else:
              #handle the case where the dataframe is empty
              chart_html = "<h1>Sorry, I can't find your swimmer.</h1>"
