@@ -29,7 +29,7 @@ def lookup_data(data):
     query_columns = f"SELECT  swimmer, year_week as 'week', event_name as 'event',cast(final_seconds as float) as 'final(seconds)', final"
     query_table = f"FROM v2_YEAR2012_AFT"
     query_filter = f"where final_seconds not in ('NS', 'DQ', 'DNF') and swimmer_name like '{data}%'"
-    query_orderby = f"order by swimmer_age"
+    query_orderby = f"order by swimmer_age, year, week"
     query = f"{query_columns} {query_table} {query_filter} {query_orderby}"
     cursor = db.cursor()
     cursor.execute(query)
