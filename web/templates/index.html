@@ -1,32 +1,75 @@
 <!DOCTYPE html>
 <html>
-<head>
+<!DOCTYPE html>
+<html>
+  <head>
     <title>MCSL Swim Progress</title>
-    <link rel="stylesheet" type="text/css" href= "{{ url_for('static',filename='css/swim.css') }}">
-
-</head>
-<body>
-<div class="section bg-image">
-    <div class="w-container hero-text"></div>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <style>
+      body {
+        background-color: #e5f5f5;
+      }
+      .container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #E1F5FE;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.3);
+      }
+      .btn-primary {
+        background-color: #51C6CF;
+        border-color: #51C6CF;
+      }
+      .btn-primary:hover {
+        background-color: #4BAEBF;
+        border-color: #4BAEBF;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
     <form method="POST">
-        <h3>Swimmer Name:</h3>
-        <br>
-        <input type = "text" name="swimmer" id="swimmer" size = "40" style = "height:20px;" />
-        <h4>(Last Name, First Name)</h4>
-        <br>
-        <h3>Stroke:</h3><br>
-        <label><h1><input type="radio" name="stroke" value="free" checked="checked">freestyle</h1></label>
-        <label><h1><input type="radio" name="stroke" value="back">backstroke</h1></label>
-        <label><h1><input type="radio" name="stroke" value="fly">butterfly</h1></label>
-        <label><h1><input type="radio" name="stroke" value="breast">breaststroke</h1></label>
-        <label><h1><input type="radio" name="stroke" value="individual">individual medley</h1></label>
-        <label><h1><input type="radio" name="stroke" value="all">all</h1></label>
-        <br>
-        <br>
+        <div class="form-group">
+          <label for="name">Swimmer Name:</label>
+          <input type="text" id="swimmer" name="swimmer" class="form-control" placeholder="Lastname, Firstname">
+        </div>
 
-        <button class="button">Show Progress</button>
-    </form>
-</div>
-</div>
-</body>
+        <div class="form-group">
+          <label>Stroke:</label>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="stroke" id="free" value="free">
+            <label class="form-check-label" for="male">freestyle</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="stroke" id="back" value="back">
+            <label class="form-check-label" for="female">backstroke</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="stroke" id="fly" value="fly">
+            <label class="form-check-label" for="female">butterfly</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="stroke" id="breast" value="breast">
+            <label class="form-check-label" for="female">breaststroke</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="stroke" id="individual" value="individual">
+            <label class="form-check-label" for="individual">individual medley</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="stroke" id="all" value="all">
+            <label class="form-check-label" for="female">all</label>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Show Progress</button>
+      </form>
+    </div>
+  </body>
 </html>
