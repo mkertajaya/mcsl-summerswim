@@ -87,7 +87,7 @@ def home():
              #get the last row as the df is ordered by swimmer age
             title = data_values["swimmer"].iloc[-1]
             #create the chart
-            fig = px.line(data_values, x="week", y="final(seconds)", color="event", text="final",markers=True, title=title)
+            fig = px.line(data_values, x="week", y="final(seconds)", color="event", text="final", title=title)
             
             # #use together with scroolZoom, disable zooming in chart
             # fig.update_xaxes(fixedrange=True)
