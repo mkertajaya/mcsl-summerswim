@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 import os
 import pandas as pd
 import glob
+import re
 
 
 def convert_mcsl_data(htmlbasepath,filename_html,filename_output='output.csv'):
@@ -33,6 +34,7 @@ def convert_mcsl_data(htmlbasepath,filename_html,filename_output='output.csv'):
 
     for td in cols:
         try:
+            td.string = td.get_text(strip=True)
             string = ''.join(td.find(string=True))
             content.append(string)
         except: pass
@@ -42,7 +44,8 @@ def convert_mcsl_data(htmlbasepath,filename_html,filename_output='output.csv'):
     #loop the rest
     for line in content:
         if line[0:5] == 'Event':
-            event = line
+            substring = "AthleteSeedFinal"
+            event = re.split(substring, line)[0]
         else:
             #start of new record, when it sees rank
             if (line[1:2] == '.' and len(line)==2) or (line[2:3] == '.' and len(line) == 3) or (line[2:3] == 'T' and len(line) == 4): #T is for tie
@@ -109,7 +112,7 @@ def convert_mcsl_data(htmlbasepath,filename_html,filename_output='output.csv'):
 #file/folder
 # html_loc = "/Users/mk/Documents/pyProject/mcsl-summwerswim/data/2019/week1/*.html"
 
-htmlbasepath = "./data/2023/week1/*.html"
+htmlbasepath = "./data/2023/week3/*.html"
 # filename_output = '2019.csv'
 # filename_html = 'WvEW.html'
 
