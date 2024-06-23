@@ -25,59 +25,49 @@ def convert_mcsl_data(htmlbasepath,filename_html,filename_output='output.csv'):
     week = htmlfile_list[3] #this depends on path you gave
 
     #process the rest of the file
-    # Find all <h4> tags (event names)
-    event_tags = soup.find_all('h4')
+    table = soup.find("table")
+    cols = table.findAll("td")
 
-    # Initialize an empty list to store event data
-    events = []
+    content = []
+    result = []
+    record = []
 
-    # Loop through each event tag
-    for event_tag in event_tags:
-        event_name = event_tag.text.strip()
+    for td in cols:
+        try:
+            td.string = td.get_text(strip=True)
+            string = ''.join(td.find(string=True))
+            content.append(string)
+        except: pass
 
-        # Find the corresponding table for each event
-        table = event_tag.find_next('table')
-        rows = table.find_all('tr')
+    event = content[0]
 
-        # Initialize an empty list for this event's data
-        event_data = []
+    #loop the rest
+    for line in content:
+        if line[0:5] == 'Event':
+            substring = "AthleteSeedFinal"
+            event = re.split(substring, line)[0]
+        else:
+            #start of new record, when it sees rank
+            if (line[1:2] == '.' and len(line)==2) or (line[2:3] == '.' and len(line) == 3) or (line[2:3] == 'T' and len(line) == 4): #T is for tie
+                if result:
+                    record.append(result)
+                    result = []
+                result.append(year)
+                result.append(week)
+                result.append(event)
+                result.append(line)
+            else:
+                result.append(line)
 
-    # Loop through rows (skip the header row)
-        for row in rows[1:]:
-            cells = row.find_all('td')
-            if cells:
-                position, name, seed_time, final_time, points = [cell.text.strip() for cell in cells]
-                event_data.append({
-                    'position': position,
-                    'name': name,
-                    'seed_time': seed_time,
-                    'final_time': final_time,
-                    'points': points
-                })
-
-        # Append the event data to the list
-        events.append({'event_name': event_name, 'data': event_data})
-
-    # Create new list for dataframe
-    data_list=[]
-    for event in events:
-        event_name = event['event_name']
-        # print(f"Event Name: {event['event_name']}"
-        for data in event['data']:
-            # print(f"year: {year}, week: {week}, event: {event_name}, rank: {data['position']}, swimmer: {data['name']}, seed: {data['seed_time']}, final: {data['final_time']}, point: {data['points']}")
-            data_list.append({
-                        'year': year,
-                        'week': week,
-                        'event': event_name,
-                        'rank': data['position'],
-                        'swimmer': data['name'],
-                        'seed': data['seed_time'],
-                        'final': data['final_time'],
-                        'point': data['points']
-                    })
-
+    #take out relay record,
+    individual_record = []
+    for l in record:
+        if 'Relay' not in l[2]: #third element on the list is where the event is located
+            #print(l)
+            individual_record.append(l)
+    
     #create dataframe
-    df = pd.DataFrame(data_list) 
+    df = pd.DataFrame(individual_record, columns =['year', 'week', 'event', 'rank', 'swimmer', 'seed', 'final']) 
 
     #special handling for swimmer with () on its name
     df['swimmer'] = df['swimmer'].apply(lambda x:x.replace('(Dan)', '- Dan'))
@@ -85,13 +75,9 @@ def convert_mcsl_data(htmlbasepath,filename_html,filename_output='output.csv'):
     df['swimmer'] = df['swimmer'].apply(lambda x:x.replace('(Jojo)', '- Jojo'))
     df['swimmer'] = df['swimmer'].apply(lambda x:x.replace('(Jorie)', '- Jorie'))
 
-   #get event number
-    df['event_no'] = df['event'].apply(lambda x:x.split('-')[0].replace('Event ', ''))
-    #remove relay events (27,28,49,50) , i am using space at the end cause data has it
-    df = df[~df['event_no'].isin(['27 ','28 ' ,'49 ','50 '])]
 
     #splitting swimmer colunn into 3
-    df[['swimmer_name', 'swimmer_age', 'swimmer_team']] = df['swimmer'].str.split(pat='(', expand=True, n=2)
+    df[['swimmer_name', 'swimmer_age', 'swimmer_team']] = df['swimmer'].str.split(pat='(', expand=True)
     #remove ')' from age and team
     df['swimmer_age'] = df['swimmer_age'].apply(lambda x:x.replace(')',''))
     df['swimmer_team'] = df['swimmer_team'].apply(lambda x:x.replace(')',''))
@@ -113,7 +99,9 @@ def convert_mcsl_data(htmlbasepath,filename_html,filename_output='output.csv'):
     df['seed_seconds'] = df['seed'].apply(lambda x:x_to_seconds(x))
     df['final_seconds'] = df['final'].apply(lambda x:x_to_seconds(x))
 
- 
+    #get event number
+    df['event_no'] = df['event'].apply(lambda x:x.split('-')[0].replace('Event ', ''))
+
     #export to csv with | delimited
     df.to_csv(outputpath,sep='|', index=False) # Use pipe to seperate data
 
@@ -124,7 +112,7 @@ def convert_mcsl_data(htmlbasepath,filename_html,filename_output='output.csv'):
 #file/folder
 # html_loc = "/Users/mk/Documents/pyProject/mcsl-summwerswim/data/2019/week1/*.html"
 
-htmlbasepath = "./data/2024/week1/*.html"
+htmlbasepath = "./data/2023/week6/*.html"
 # filename_output = '2019.csv'
 # filename_html = 'WvEW.html'
 
