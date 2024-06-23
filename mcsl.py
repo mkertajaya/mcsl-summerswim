@@ -115,7 +115,7 @@ def convert_mcsl_data(htmlbasepath,filename_html,filename_output='output.csv'):
 
  
     #export to csv with | delimited
-    df.to_csv(outputpath,sep='|', index=False) # Use pipe to seperate data
+    df.to_csv(filename_output,sep='|', index=False, columns=['year', 'week', 'event', 'rank', 'swimmer', 'seed', 'final']) # Use pipe to seperate data
 
     #return test
     return(f'{htmlpath} is processed')
