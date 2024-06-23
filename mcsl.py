@@ -124,7 +124,7 @@ def convert_mcsl_data(htmlbasepath,filename_html,filename_output='output.csv'):
 #file/folder
 # html_loc = "/Users/mk/Documents/pyProject/mcsl-summwerswim/data/2019/week1/*.html"
 
-htmlbasepath = "./data/2024/week1/*.html"
+htmlbasepath = "./data/2024/week2/*.html"
 # filename_output = '2019.csv'
 # filename_html = 'WvEW.html'
 
