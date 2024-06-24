@@ -1,3 +1,4 @@
+#this file is only for pythonanywhere, it doesn't have if __name__ == "__main__":
 from flask import Flask, render_template, request
 import pandas as pd
 import plotly.express as px
@@ -117,8 +118,4 @@ def home():
         #to show index html as starting point
         return render_template("index.html")
     
-
-if __name__ == "__main__":
-    app.run(debug=True)
-
 
