@@ -28,9 +28,8 @@ def lookup_data(swimmer, stroke):
 
     # default query
     query_columns = f"SELECT  swimmer, year_week as 'week', event_name as 'event', cast(final_seconds as float) as 'final(seconds)', final"
-    query_table = f"FROM v2_YEAR2012_AFT"
+    query_table = f"FROM v_result"
     query_filter = f"where final_seconds not in ('NS', 'DQ', 'DNF') and swimmer_name like '{swimmer}%'"
-
     
     #all star query
     union_all_star_query = f" union all SELECT swimmer, year_week as 'week',  CONCAT(d.event_name, ' ', 'All Star') as 'event',  cast(allstar.nom_time_sec as float) as 'final(seconds)',  allstar.nom_time as 'final' FROM v2_YEAR2012_AFT as d join all_star_nom as allstar on d.event_no = allstar.event_no and d.`year` = (select max(year) from v2_YEAR2012_AFT)"
