@@ -10,4 +10,4 @@ select *, CONCAT(cast(year as CHAR), '-', week) as 'year_week', substring(event,
 
 select year_week, count(1) from v2_YEAR2012_AFT
 group by year_week 
-order by 1
+order by 1 desc
